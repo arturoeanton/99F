@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://example.com/product.schema.json",
   "title": "Product",
-  "description": "A product from Acme's catalog",
+  "description": "A product example",
   "type": "object",
   "properties": {
     "productId": {
@@ -57,16 +57,11 @@
       "type": "string",
       "regex":"^[a-z0-9._%+\\-]+@[a-z0-9.\\-]+\\.[a-z]{2,4}$"
     },
-
-
     "productType": {
       "description": "Name of the product",
       "type": "string",
       "enum":["big","small", "class"]
     },
-
-    
-
     "price": {
       "description": "The price of the product",
       "type": "number",

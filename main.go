@@ -39,13 +39,22 @@ func main() {
 	})
 
 	fiberApp.Get("/schema/:name", func(c *fiber.Ctx) error {
-		name := c.Params("name", "demo")
+		name := c.Params("name", "")
 		schema, _ := jsonschema.GetSchema(name)
 		return c.JSON(schema)
 	})
 
+	fiberApp.Post("/validate/:name", func(c *fiber.Ctx) error {
+		name := c.Params("name", "")
+		_, err := jsonschema.Bind(name, c.Body())
+		if err != nil {
+			return c.Status(fasthttp.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		}
+		return c.SendStatus(fasthttp.StatusNoContent)
+	})
+
 	fiberApp.Post("/resource/:name", func(c *fiber.Ctx) error {
-		name := c.Params("name", "demo")
+		name := c.Params("name", "")
 		element, err := jsonschema.Bind(name, c.Body())
 		if err != nil {
 			return c.Status(fasthttp.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
@@ -104,6 +113,16 @@ func main() {
 			return c.Status(fasthttp.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 		}
 		return c.Status(fasthttp.StatusNoContent).SendString("")
+	})
+
+	fiberApp.Get("/form/:name", func(c *fiber.Ctx) error {
+		name := c.Params("name", "")
+		html, err := jsonschema.Form(name)
+		if err != nil {
+			return c.Status(fasthttp.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		}
+		c.Set(fiber.HeaderContentType, fiber.MIMETextHTML)
+		return c.SendString(html)
 	})
 
 	log.Fatal(fiberApp.Listen(*addr))
