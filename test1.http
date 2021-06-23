@@ -14,7 +14,7 @@ Content-Type: {{contentType}}
   "productIPv4": "12.0.0.1",
   "productIPv6": "::1",
   "productURL": "http://google.com",
-  "productUUID":"d02cda26-f6c4-4cc0-8776-8e561fec9bd4",
+  "productUUID":"d02cda26-f6c4-4cc0-8776-8e561fec9bd5",
   "productDate": "13-09-1980",
   "price": 1,
   "productType":"small",
