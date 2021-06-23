@@ -123,5 +123,8 @@
     }
 
   },
+  "maxProperties":16,
+  "minProperties":14,
+  "__strict":true,
   "required": [ "productId", "productName", "price" ]
 }

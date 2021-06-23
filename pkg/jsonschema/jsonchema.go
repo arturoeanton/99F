@@ -42,6 +42,11 @@ type JSONSchame struct {
 	MaxItems         *int                   `json:"maxItems,omitempty"`
 	MaxContains      *int                   `json:"maxContains,omitempty"`
 	MinContains      *int                   `json:"minContains,omitempty"`
+	MaxProperties    *int                   `json:"maxProperties,omitempty"`
+	MinProperties    *int                   `json:"minProperties,omitempty"`
+
+	//no standard
+	Strict *bool `json:"_strict,omitempty"`
 }
 
 var (
@@ -110,6 +115,7 @@ func validate(data interface{}, schema JSONSchame, fieldName string) error {
 				return errors.New("not found " + fmt.Sprint(v))
 			}
 		}
+		lenProperties := 0
 		if schema.Properties != nil {
 			for k, v := range *schema.Properties {
 				if subItem, ok := item[k]; ok {
@@ -120,11 +126,29 @@ func validate(data interface{}, schema JSONSchame, fieldName string) error {
 				}
 			}
 			for k := range item {
-				if _, ok := (*schema.Properties)[k]; !ok {
-					return errors.New("not found in schema " + fmt.Sprint(k))
+				lenProperties++
+				if schema.Strict != nil {
+					if *schema.Strict {
+						if _, ok := (*schema.Properties)[k]; !ok {
+							return errors.New("not found in schema " + fmt.Sprint(k))
+						}
+					}
 				}
+
 			}
 		}
+
+		if schema.MaxProperties != nil {
+			if lenProperties > *schema.MaxProperties {
+				return errors.New(fieldName + " has maxProperties " + fmt.Sprint(*schema.MaxProperties))
+			}
+		}
+		if schema.MinProperties != nil {
+			if lenProperties < *schema.MinProperties {
+				return errors.New(fieldName + " has minProperties " + fmt.Sprint(*schema.MinProperties))
+			}
+		}
+
 	}
 
 	if schema.Type == "number" {

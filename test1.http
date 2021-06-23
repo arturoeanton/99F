@@ -16,16 +16,24 @@ Content-Type: {{contentType}}
   "productURL": "http://google.com",
   "productUUID":"d02cda26-f6c4-4cc0-8776-8e561fec9bd4",
   "productDate": "13-09-1980",
-  "price": 15.1,
+  "price": 1,
   "productType":"small",
   "dimensions":{
       "length":0.9,
       "width":1.6,
       "height":1.0
   },
-  "tags":  [ "home", "green", "green1" ],
+  "tags":  [ "home", "green", "green1" ,"1"],
   "address":[
      1600, "Pennsylvania", "Avenue", "NW"
   ],
-  "data":["aa"]
+  "data":["aa",1,2,3]
 }
+
+###
+
+
+GET http://{{host}}/resource/product/716579a3-4a6c-424f-9318-c59a91486973  HTTP/1.1 
+
+
+###
