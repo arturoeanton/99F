@@ -1,0 +1,31 @@
+@hostname = localhost
+@port = 9090
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+POST http://{{host}}/resource/product HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "productId": 1.0,
+  "productName": "A green door",
+  "productEmail": "aa@a.com",
+  "productRegex":"a@a.com",
+  "productIPv4": "12.0.0.1",
+  "productIPv6": "::1",
+  "productURL": "http://google.com",
+  "productUUID":"d02cda26-f6c4-4cc0-8776-8e561fec9bd4",
+  "productDate": "13-09-1980",
+  "price": 15.1,
+  "productType":"small",
+  "dimensions":{
+      "length":0.9,
+      "width":1.6,
+      "height":1.0
+  },
+  "tags":  [ "home", "green", "green1" ],
+  "address":[
+     1600, "Pennsylvania", "Avenue", "NW"
+  ],
+  "data":["aa"]
+}
