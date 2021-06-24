@@ -20,7 +20,7 @@ import (
 
 func main() {
 
-	addr := flag.String("addr", ":9090", "http service address")
+	addr := flag.String("addr", ":3000", "http service address")
 	flag.Parse()
 
 	jsonschema.InitDB()
