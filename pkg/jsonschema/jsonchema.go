@@ -55,7 +55,7 @@ var (
 )
 
 func GetSchema(name string) (*JSONSchame, error) {
-	file, err := ioutil.ReadFile("schemas/" + name + ".json")
+	file, err := ioutil.ReadFile("entities/" + name + "/schema.json")
 	if err != nil {
 		return nil, err
 	}

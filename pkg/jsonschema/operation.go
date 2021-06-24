@@ -4,8 +4,10 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/arturoeanton/99F/pkg/event"
 	"github.com/arturoeanton/99F/pkg/parser"
 	"github.com/couchbase/gocb/v2"
+
 	"github.com/google/uuid"
 )
 
@@ -16,9 +18,19 @@ type ListResponse struct {
 	Resources    []interface{} `json:"resources,omitempty"`
 }
 
-func Create(data map[string]interface{}, nameSchema string) (map[string]interface{}, error) {
+func Create(data map[string]interface{}, nameSchema string) (map[string]interface{}, string, error) {
 	id := uuid.New().String()
-	return Replace(data, id, nameSchema)
+	element := make(map[string]interface{})
+	element["meta"] = map[string]string{
+		"id": id,
+	}
+	element["data"] = data
+	bucket := Cluster.Bucket(nameSchema)
+	collection := bucket.DefaultCollection()
+	_, err := collection.Upsert(id, element, &gocb.UpsertOptions{})
+	event.Emmit("create", nameSchema, id, element)
+
+	return element, id, err
 }
 
 func Replace(data map[string]interface{}, id string, nameSchema string) (map[string]interface{}, error) {
@@ -30,6 +42,7 @@ func Replace(data map[string]interface{}, id string, nameSchema string) (map[str
 	bucket := Cluster.Bucket(nameSchema)
 	collection := bucket.DefaultCollection()
 	_, err := collection.Upsert(id, element, &gocb.UpsertOptions{})
+	event.Emmit("replace", nameSchema, id, element)
 	return element, err
 }
 
@@ -45,14 +58,19 @@ func GetElementByID(id string, nameSchema string) (map[string]interface{}, error
 	return data, nil
 }
 
-func Remove(id, nameSchema string) error {
+func Remove(id, nameSchema string) (map[string]interface{}, error) {
+	elem, err := GetElementByID(id, nameSchema)
+	if err != nil {
+		return elem, err
+	}
 	bucket := Cluster.Bucket(nameSchema)
 	collection := bucket.DefaultCollection()
-	_, err := collection.Remove(id, &gocb.RemoveOptions{})
+	_, err = collection.Remove(id, &gocb.RemoveOptions{})
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	event.Emmit("remove", nameSchema, id, elem)
+	return elem, nil
 }
 
 func Search(nameSchema, filter, startIndex, count, sortBy, sortOrder string) (*ListResponse, error) {

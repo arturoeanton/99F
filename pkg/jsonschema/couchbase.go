@@ -3,7 +3,6 @@ package jsonschema
 import (
 	"io/ioutil"
 	"log"
-	"strings"
 	"time"
 
 	"github.com/couchbase/gocb/v2"
@@ -65,9 +64,8 @@ func CreateBuckets(folderConfig string) {
 		log.Fatal(err)
 	}
 	for _, f := range files {
-		if strings.HasSuffix(f.Name(), ".json") {
-			name := f.Name()
-			CreateBucket(name[0 : len(name)-5])
+		if f.IsDir() {
+			CreateBucket(f.Name())
 		}
 	}
 }

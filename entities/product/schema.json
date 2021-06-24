@@ -1,0 +1,125 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://example.com/product.schema.json",
+    "title": "Product",
+    "description": "A product example",
+    "type": "object",
+    "properties": {
+      "productId": {
+        "description": "The unique identifier for a product",
+        "type": "integer"
+      },
+      "productName": {
+        "description": "Name of the product",
+        "type": "string",
+        "minLength": 5,
+        "maxLength": 50
+      },
+  
+      "productEmail": {
+        "description": "Name of the product",
+        "type": "string",
+        "format":"email"
+      },
+  
+      "productIPv4": {
+        "description": "Name of the product",
+        "type": "string",
+        "format":"ipv4"
+      },
+  
+      "productIPv6": {
+        "description": "Name of the product",
+        "type": "string",
+        "format":"ipv6"
+      },
+  
+      "productURL": {
+        "description": "Name of the product",
+        "type": "string",
+        "format":"url"
+      },
+  
+      "productDate": {
+        "description": "Name of the product",
+        "type": "string",
+        "format":"date",
+        "example":"02-01-2006"
+      },
+      "productUUID": {
+        "description": "Name of the product",
+        "type": "string",
+        "format":"uuid"
+      },
+  
+      "productRegex": {
+        "description": "Name of the product",
+        "type": "string",
+        "regex":"^[a-z0-9._%+\\-]+@[a-z0-9.\\-]+\\.[a-z]{2,4}$"
+      },
+      "productType": {
+        "description": "Name of the product",
+        "type": "string",
+        "enum":["big","small", "class"]
+      },
+      "price": {
+        "description": "The price of the product",
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "exclusiveMaximum": 1000
+      },
+      "tags": {
+        "description": "Tags for the product",
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "maxItems": 4,
+        "uniqueItems": true
+      },
+      "dimensions": {
+        "type": "object",
+        "properties": {
+          "length": {
+            "type": "number"
+          },
+          "width": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          }
+        },
+        "required": [ "length", "width", "height" ]
+      },
+  
+      "address":{
+        "type": "array",
+        "items": [
+          { "type": "number" },
+          { "type": "string" },
+          { "enum": ["Street", "Avenue", "Boulevard"] },
+          { "enum": ["NW", "NE", "SW", "SE"] }
+        ],
+        "additionalItems": {
+          "type":"number"
+        }
+      },
+  
+  
+      "data":{
+        "type": "array",
+        "contains": {
+          "type":"number"
+        },
+        "maxContains": 3,
+        "minContains": 2
+      }
+  
+    },
+    "maxProperties":16,
+    "minProperties":14,
+    "__strict":true,
+    "required": [ "productId", "productName", "price" ]
+  }
